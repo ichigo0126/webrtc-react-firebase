@@ -1,21 +1,11 @@
 import TouchRipple from '@material-ui/core/ButtonBase/TouchRipple';
+import { TrendingUpRounded } from '@material-ui/icons';
 import React, {useState} from 'react';
 import InputFormLocal from './InputFormLocal';
 import InputFormRemote from './InputFormRemote';
-
-const getMedia = async ()=>  {
-  const constraints = {audio: TouchRipple, video: true};
-
-  try {
-    return await navigator.mediaDevices.getUserMedia(constraints);
-    /* ストリームを使用 */
-  } catch(err) {
-    /* エラーを処理 */
-  }
-}
+import VideoArea from './VideoArea';
 
 
-getMedia();
 
 const App = ()  =>{
   const [localPeerName, setLocalPeerName] = useState('');
@@ -32,6 +22,9 @@ const App = ()  =>{
     remotePeerName={remotePeerName}
     setRemotePeerName={setRemotePeerName}
     />
+    <VideoArea 
+        localPeerName={localPeerName}
+        remotePeerName={remotePeerName}/>
   </>
   );
 };
