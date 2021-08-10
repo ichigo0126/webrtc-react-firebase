@@ -1,6 +1,7 @@
 import TouchRipple from '@material-ui/core/ButtonBase/TouchRipple';
-import React from 'react';
-import {Button} from '@material-ui/core';
+import React, {useState} from 'react';
+import InputFormLocal from './InputFormLocal';
+import InputFormRemote from './InputFormRemote';
 
 const getMedia = async ()=>  {
   const constraints = {audio: TouchRipple, video: true};
@@ -17,7 +18,21 @@ const getMedia = async ()=>  {
 getMedia();
 
 const App = ()  =>{
-  return <Button color="primary" variant="text">Hello, World!</Button>;
-}
+  const [localPeerName, setLocalPeerName] = useState('');
+  const [remotePeerName, setRemotePeerName] = useState('');
+
+  return (
+  <>
+    <InputFormLocal 
+    localPeerName={localPeerName}
+    setLocalPeerName={setLocalPeerName}
+    />
+    <InputFormRemote 
+    remotePeerName={remotePeerName}
+    setRemotePeerName={setRemotePeerName}
+    />
+  </>
+  );
+};
 
 export default App;
