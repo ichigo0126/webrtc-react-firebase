@@ -1,31 +1,17 @@
-import TouchRipple from '@material-ui/core/ButtonBase/TouchRipple';
-import { TrendingUpRounded } from '@material-ui/icons';
-import React, {useState} from 'react';
-import InputFormLocal from './InputFormLocal';
-import InputFormRemote from './InputFormRemote';
+import React from 'react';
+
+import InputForms from './InputForms';
 import VideoArea from './VideoArea';
+import useRtcClient from './hooks/useRtcClient';
 
+const App = () => {
+  const rtcClient = useRtcClient();
 
-
-const App = ()  =>{
-  const [localPeerName, setLocalPeerName] = useState('');
-  const [remotePeerName, setRemotePeerName] = useState('');
-  console.log({localPeerName, remotePeerName})
   return (
-  <>
-    <InputFormLocal 
-    localPeerName={localPeerName}
-    setLocalPeerName={setLocalPeerName}
-    />
-    <InputFormRemote 
-    localPeerName={localPeerName}
-    remotePeerName={remotePeerName}
-    setRemotePeerName={setRemotePeerName}
-    />
-    <VideoArea 
-        localPeerName={localPeerName}
-        remotePeerName={remotePeerName}/>
-  </>
+    <>
+      <InputForms rtcClient={rtcClient} />
+      <VideoArea rtcClient={rtcClient} />
+    </>
   );
 };
 

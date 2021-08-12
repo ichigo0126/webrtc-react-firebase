@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -12,8 +12,8 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://www.wantedly.com/id/shoma_sakamaki">
-        しょうま
+      <Link color="inherit" href="https://www.udemy.com/user/ham-san/">
+        はむさん
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -41,8 +41,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn({localPeerName, remotePeerName, setRemotePeerName}) {
-  const label = '相手の名前'
+export default function SignIn({ rtcClient }) {
+  const label = '相手の名前';
   const classes = useStyles();
   const [disabled, setDisabled] = useState(true);
   const [name, setName] = useState('');
@@ -55,13 +55,15 @@ export default function SignIn({localPeerName, remotePeerName, setRemotePeerName
 
   const initializeRemotePeer = useCallback(
     (e) => {
-      setRemotePeerName(name);
+      rtcClient.remotePeerName = name;
+      rtcClient.setRtcClient();
       e.preventDefault();
-    },[name, setRemotePeerName]
+    },
+    [name, rtcClient]
   );
 
-  if(localPeerName === '')return <></>
-  if(remotePeerName !== '')return <></>
+  if (rtcClient.localPeerName === '') return <></>;
+  if (rtcClient.remotePeerName !== '') return <></>;
 
   return (
     <Container component="main" maxWidth="xs">
@@ -71,7 +73,7 @@ export default function SignIn({localPeerName, remotePeerName, setRemotePeerName
           {label}を入力してください
         </Typography>
         <form className={classes.form} noValidate>
-        <TextField
+          <TextField
             autoFocus
             fullWidth
             label={label}
@@ -81,9 +83,9 @@ export default function SignIn({localPeerName, remotePeerName, setRemotePeerName
             onCompositionEnd={() => setIsComposed(false)}
             onCompositionStart={() => setIsComposed(true)}
             onKeyDown={(e) => {
-              if(isComposed) return;
-              if(e.target.value === '')return;
-              if(e.key === 'Enter') {initializeRemotePeer(e);}
+              if (isComposed) return;
+              if (e.target.value === '') return;
+              if (e.key === 'Enter') initializeRemotePeer(e);
             }}
             required
             value={name}
@@ -94,7 +96,7 @@ export default function SignIn({localPeerName, remotePeerName, setRemotePeerName
             color="primary"
             disabled={disabled}
             fullWidth
-            onClick={(e) => {initializeRemotePeer(e);}}
+            onClick={(e) => initializeRemotePeer(e)}
             type="submit"
             variant="contained"
           >

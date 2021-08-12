@@ -16,19 +16,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const VideoArea = (localPeerName, remotePeerName) =>  {
+const VideoArea = ({ rtcClient }) => {
   const classes = useStyles();
+
+  if (rtcClient === null) return <></>;
 
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
-          <VideoLocal localPeerName={localPeerName} />
+          <VideoLocal rtcClient={rtcClient} />
         </Grid>
-        <Grid item xs={12} sm={6}></Grid>
+        <Grid item xs={12} sm={6}>
+          <VideoRemote rtcClient={rtcClient} />
+        </Grid>
       </Grid>
     </div>
   );
-}
+};
 
 export default VideoArea;
