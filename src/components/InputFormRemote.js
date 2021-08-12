@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -12,8 +12,8 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://www.wantedly.com/id/shoma_sakamaki">
-        しょうま
+      <Link color="inherit" href="https://www.udemy.com/user/ham-san/">
+        はむさん
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -41,9 +41,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn({remotePeerName, setRemotePeerName}) {
-  const label = '相手の名前'
+export default function SignIn({ rtcClient }) {
+  const label = '相手の名前';
   const classes = useStyles();
+  const [disabled, setDisabled] = useState(true);
+  const [name, setName] = useState('');
+  const [isComposed, setIsComposed] = useState(false);
+
+  useEffect(() => {
+    const disabled = name === '';
+    setDisabled(disabled);
+  }, [name]);
+
+  const initializeRemotePeer = useCallback(
+    (e) => {
+      rtcClient.remotePeerName = name;
+      rtcClient.setRtcClient();
+      e.preventDefault();
+    },
+    [name, rtcClient]
+  );
+
+  if (rtcClient.localPeerName === '') return <></>;
+  if (rtcClient.remotePeerName !== '') return <></>;
 
   return (
     <Container component="main" maxWidth="xs">
@@ -53,19 +73,30 @@ export default function SignIn({remotePeerName, setRemotePeerName}) {
           {label}を入力してください
         </Typography>
         <form className={classes.form} noValidate>
-        <TextField
+          <TextField
             autoFocus
             fullWidth
             label={label}
             margin="normal"
             name="name"
+            onChange={(e) => setName(e.target.value)}
+            onCompositionEnd={() => setIsComposed(false)}
+            onCompositionStart={() => setIsComposed(true)}
+            onKeyDown={(e) => {
+              if (isComposed) return;
+              if (e.target.value === '') return;
+              if (e.key === 'Enter') initializeRemotePeer(e);
+            }}
             required
+            value={name}
             variant="outlined"
           />
           <Button
             className={classes.submit}
             color="primary"
+            disabled={disabled}
             fullWidth
+            onClick={(e) => initializeRemotePeer(e)}
             type="submit"
             variant="contained"
           >

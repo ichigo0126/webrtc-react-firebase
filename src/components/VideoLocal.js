@@ -1,29 +1,31 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react';
 
-const VideoLocal = () => {
-    const videoRef = useRef(null);
-    const currentVideoRef = videoRef.current;
+import Video from './Video';
 
-    useEffect(() => {
-        if (currentVideoRef === null) return;
+const VideoLocal = ({ name }) => {
+  const videoRef = useRef(null);
+  const currentVideoRef = videoRef.current;
 
-        const getMedia = async () => {
-            const constraints = { audio: true, video: true };
+  useEffect(() => {
+    if (currentVideoRef === null) return;
 
-            try {
-                const mediaStream = await navigator.mediaDevices.getUserMedia(
-                    constraints
-                    );
-                currentVideoRef.srcObject = mediaStream();
-            } catch (err) {
-                console.error(err)
-            }
-        }
+    const getMedia = async () => {
+      const constraints = { audio: true, video: true };
 
-        getMedia();
-    }, [currentVideoRef]);
+      try {
+        const mediaStream = await navigator.mediaDevices.getUserMedia(
+          constraints
+        );
+        currentVideoRef.srcObject = mediaStream;
+      } catch (err) {
+        console.error(err);
+      }
+    };
 
-    return <></>
+    getMedia();
+  }, [currentVideoRef]);
+
+  return <Video isLocal={true} name={name} videoRef={videoRef} />;
 };
 
 export default VideoLocal;

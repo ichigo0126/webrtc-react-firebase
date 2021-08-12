@@ -1,37 +1,17 @@
-import TouchRipple from '@material-ui/core/ButtonBase/TouchRipple';
-import React, {useState} from 'react';
-import InputFormLocal from './InputFormLocal';
-import InputFormRemote from './InputFormRemote';
+import React from 'react';
 
-const getMedia = async ()=>  {
-  const constraints = {audio: TouchRipple, video: true};
+import InputForms from './InputForms';
+import VideoArea from './VideoArea';
+import useRtcClient from './hooks/useRtcClient';
 
-  try {
-    return await navigator.mediaDevices.getUserMedia(constraints);
-    /* ストリームを使用 */
-  } catch(err) {
-    /* エラーを処理 */
-  }
-}
-
-
-getMedia();
-
-const App = ()  =>{
-  const [localPeerName, setLocalPeerName] = useState('');
-  const [remotePeerName, setRemotePeerName] = useState('');
+const App = () => {
+  const rtcClient = useRtcClient();
 
   return (
-  <>
-    <InputFormLocal 
-    localPeerName={localPeerName}
-    setLocalPeerName={setLocalPeerName}
-    />
-    <InputFormRemote 
-    remotePeerName={remotePeerName}
-    setRemotePeerName={setRemotePeerName}
-    />
-  </>
+    <>
+      <InputForms rtcClient={rtcClient} />
+      <VideoArea rtcClient={rtcClient} />
+    </>
   );
 };
 
