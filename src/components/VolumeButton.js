@@ -9,8 +9,7 @@ const VolumeButton = ({isLocal, muted, rtcClient,setMuted,}) => {
     return (
         <IconButton aria-label="switch mute" onClick={() =>{
             setMuted((previousState) => !previousState)
-            //以下はlocal側だけで実行可能
-            if(isLocal)rtcClient.taggleAudio();
+            if(isLocal)　rtcClient.toggleAudio();
         }}>
           <Icon />
         </IconButton>

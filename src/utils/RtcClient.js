@@ -1,6 +1,6 @@
 import FirebaseSignallingClient from './FirebaseSignallingClient';
 
-const INITOAL_AUDIO_ENABLED = false;
+const INITIAL_AUDIO_ENABLED = false;
 
 export default class RtcClient {
   constructor(remoteVideoRef, setRtcClient) {
@@ -17,7 +17,7 @@ export default class RtcClient {
   }
 
   get initialAudioMuted() {
-    return !INITOAL_AUDIO_ENABLED;
+    return !INITIAL_AUDIO_ENABLED;
   }
 
   setRtcClient() {
@@ -45,7 +45,7 @@ export default class RtcClient {
   }
 
   addAudioTrack() {
-    this.audioTrack.enabled = INITOAL_AUDIO_ENABLED;
+    this.audioTrack.enabled = INITIAL_AUDIO_ENABLED;
     this.rtcPeerConnection.addTrack(this.audioTrack, this.mediaStream);
   }
 
@@ -62,7 +62,7 @@ export default class RtcClient {
   }
 
   toggleAudio() {
-    this.audioTrac.enable = !this.audioTrac.enable;
+    this.audioTrack.enabled = !this.audioTrack.enabled;
     this.setRtcClient();
   }
 
@@ -161,7 +161,7 @@ export default class RtcClient {
       const iceCandidate = new RTCIceCandidate(candidate);
       await this.rtcPeerConnection.addIceCandidate(iceCandidate);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   }
 
@@ -183,7 +183,7 @@ export default class RtcClient {
         const data = snapshot.val();
         if (data === null) return;
 
-        const {candidate,  sender, sessionDescription, type } = data;
+        const { candidate, sender, sessionDescription, type } = data;
         switch (type) {
           case 'offer':
             await this.answer(sender, sessionDescription);
@@ -191,10 +191,9 @@ export default class RtcClient {
           case 'answer':
             await this.saveReceivedSessionDescription(sessionDescription);
             break;
-            case 'candidate':
-              await this.addIceCandidate(candidate)
-              break;
-
+          case 'candidate':
+            await this.addIceCandidate(candidate);
+            break;
           default:
             this.setRtcClient();
             break;

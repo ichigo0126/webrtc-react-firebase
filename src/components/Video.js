@@ -8,6 +8,7 @@ import {
   Typography,
   } from '@material-ui/core';
 
+  import AudioAnalyser from './AudioAnalyser'
   import VolumeButton from './VolumeButton'
   import useDimensions from './hooks/useDimentions';
 
@@ -20,6 +21,9 @@ const Video = ({ isLocal, name, rtcClient, videoRef }) => {
   const dimensionsCard = useDimensions(refCard)
   const classes = useStyles();
 
+
+  if(videoRef.current)
+  console.log({isLocal, srcObject: videoRef.current.srcObject})
   return (
     <Card className={classes.root} ref={refCard}>
       <CardActionArea>
@@ -38,6 +42,9 @@ const Video = ({ isLocal, name, rtcClient, videoRef }) => {
         rtcClient={rtcClient}
         setMuted={setMuted}
         />
+        {!muted && videoRef.current && videoRef.current.srcObject && (
+        <AudioAnalyser audio={videoRef.current.srcObject} />
+        )}
       </CardActions>
     </Card>
   );
