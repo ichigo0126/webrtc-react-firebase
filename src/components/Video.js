@@ -1,5 +1,4 @@
 import React, {useRef, useState, } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import {
   Card,
   CardActionArea,
@@ -13,19 +12,17 @@ import {
   import useDimensions from './hooks/useDimentions';
 
 
-const useStyles = makeStyles({});
-
 const Video = ({ isLocal, name, rtcClient, videoRef }) => {
   const [muted, setMuted] = useState(rtcClient.initialAudioMuted);
   const refCard = useRef(null);
   const dimensionsCard = useDimensions(refCard)
-  const classes = useStyles();
-
+  const refVolumeButton = useRef(null);
+  const dimensionsVolumeButton = useDimensions(refVolumeButton);
 
   if(videoRef.current)
   console.log({isLocal, srcObject: videoRef.current.srcObject})
   return (
-    <Card className={classes.root} ref={refCard}>
+    <Card ref={refCard}>
       <CardActionArea>
       <video autoPlay muted={isLocal || muted} ref={videoRef} width={dimensionsCard.width}/>
 
@@ -39,11 +36,15 @@ const Video = ({ isLocal, name, rtcClient, videoRef }) => {
         <VolumeButton 
         isLocal={isLocal}
         muted={muted} 
+        refVolumeButton={refVolumeButton}
         rtcClient={rtcClient}
         setMuted={setMuted}
         />
         {!muted && videoRef.current && videoRef.current.srcObject && (
-        <AudioAnalyser audio={videoRef.current.srcObject} />
+        <AudioAnalyser 
+        audio={videoRef.current.srcObject} 
+        width={dimensionsCard.width - dimensionsVolumeButton.width　-40} 
+        />
         )}
       </CardActions>
     </Card>
