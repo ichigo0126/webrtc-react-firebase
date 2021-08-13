@@ -21,6 +21,11 @@ const VideoLocal = ({ rtcClient }) => {
     getMedia();
   }, [currentVideoRef, mediaStream]);
 
+console.log({rtcClient})
+
+if(rtcClient.localPeerName === '' || rtcClient.remotePeerName === '')
+return<></>
+
   return (
     <Video isLocal={true} name={rtcClient.localPeerName} rtcClient={rtcClient} videoRef={videoRef} />
   );
